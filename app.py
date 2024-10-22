@@ -5,7 +5,7 @@ from difflib import get_close_matches
 app = Flask(__name__)
 
 # Load knowledge base from JSON file
-def load_knowledge_base(file_path: str) -> dict:
+def load_knowledge_base(file_path: str):
     try:
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -15,19 +15,19 @@ def load_knowledge_base(file_path: str) -> dict:
         return {"questions": []}  # Return an empty structure to avoid crashes
 
 # Find best match for user question
-def find_best_match(user_question: str, questions: list[str]) -> str | None:
+def find_best_match(user_question: str, questions: list[str]):
     matches = get_close_matches(user_question, questions, n=1, cutoff=0.6)
     return matches[0] if matches else None
 
 # Get answer for a question from knowledge base
-def get_answer_for_question(question: str, knowledge_base: dict) -> str | None:
+def get_answer_for_question(question: str, knowledge_base: dict):
     for q in knowledge_base["questions"]:
         if q["question"] == question:
             return q["answer"]
     return None
 
 # Get link associated with a question from knowledge base
-def get_link_for_question(question: str, knowledge_base: dict) -> str | None:
+def get_link_for_question(question: str, knowledge_base: dict):
     for q in knowledge_base.get("questions", []):
         if q.get("question") == question:
             return q.get("link")
