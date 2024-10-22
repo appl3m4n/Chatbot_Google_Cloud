@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>Data Chatbot</title>
+</head>
+
+<body>
+    <div id="title">
+        <div class="image-container">
+            <a href="/" class="image-link">
+                <img src="static/logo.png" alt="Image 1" class="logo1">
+            </a>
+        </div>
+        <div class="image-container">
+            <a href="/link2" class="image-link">
+                <img src="static/icon-profile.png" alt="Image 2" class="logo2">
+            </a>
+        </div>
+    </div>
+<div id="form"><form name="passdata" action="/submit" method="post">
+<!--    <label>Name:</label>
+<input type="text" name="name">
+    <label>Age:</label>
+<input type="text" name="age">-->
+<label>Choose your chatbot model:</label>
+<select id="dropdownBox" name="dropdownBox">
+    <option value="option1">ChatGPT_3.5</option>
+    <option value="option2">Chatbot_JSON</option>
+    <option value="option3">TBD</option>
+</select>
+<!--<input type="text" id="inputBox" name="inputBox" value="Predefined Value">-->
+<label>Ask me a question:</label>
+<input type="text" name="chatgpt">
+ <!--    <label>Date of Birth:</label>
+<input type="date" name="dateofbirth">-->
+<input type="submit" value="submit">
+</form></div>
+
+<!--<h1>{{n}}</h1>
+<h1>{{age}}</h1>
+<h1>{{db}}</h1>-->
+
+<!--<div id="output">  <label>Your question: </label>
+    {{chatgpt_input}}
+    <p></p>
+    <label>My answer: </label>
+    {{chatgpt_output}}</div>
+
+
+<div id="output"><table border="1">
+    {% for user in userDetails %}
+    <tr>
+        <td>{{user[0]}}</td>
+        <td>{{user[1]}}</td>
+        <td>{{user[2]}}</td>
+    </tr>
+    {% endfor %}
+</table></div>-->
+
+</body>
+</html>
