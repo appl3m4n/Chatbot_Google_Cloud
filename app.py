@@ -1,8 +1,16 @@
 from flask import Flask, render_template, request
+from flask_mysqldb import MySQL
 import json
 from difflib import get_close_matches
 
 app = Flask(__name__)
+
+# Initialize Flask MySQL
+app.config['MYSQL_HOST'] = "localhost"
+app.config['MYSQL_USER'] = "root"
+app.config['MYSQL_PASSWORD'] = ""
+app.config['MYSQL_DB'] = "users_db"
+mysql = MySQL(app)
 
 # Load knowledge base from JSON file
 def load_knowledge_base(file_path: str):
@@ -62,6 +70,18 @@ def submit():
 
     # Assuming user details are collected from the form as well
     userDetails = {'name': request.form.get('name', 'Guest')}  # Example user detail
+
+    # Store user input and model output in the database
+    cur = mysql.connection.cursor()
+    cur.execute("INSERT INTO users_gpt (input, output) VALUES (%s, %s)", (chatgpt_input, chatgpt_output))
+    mysql.connection.commit()
+    cur.close()
+
+    # Fetch all data from the database
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM users_gpt ORDER BY id DESC LIMIT 5")
+    userDetails = cur.fetchall()
+    cur.close()
 
     # Render the template with user input, model output, and user details
     return render_template('index_submit.html', chatgpt_input=chatgpt_input, chatgpt_output=chatgpt_output, userDetails=userDetails)
