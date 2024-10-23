@@ -10,6 +10,14 @@ app.config['MYSQL_HOST'] = "localhost"
 app.config['MYSQL_USER'] = "root"
 app.config['MYSQL_PASSWORD'] = ""
 app.config['MYSQL_DB'] = "users_db"
+
+#Google Cloud
+#app.config['MYSQL_HOST'] = "/cloudsql/double-balm-433618-r6:us-central1:roman"
+#app.config['MYSQL_USER'] = "roman"
+#app.config['MYSQL_PASSWORD'] = "1994"
+#app.config['MYSQL_DB'] = "users_db"
+
+
 mysql = MySQL(app)
 
 # Load knowledge base from JSON file

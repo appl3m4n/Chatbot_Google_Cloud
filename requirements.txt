@@ -1,7 +1,5 @@
-runtime: python39
-
-entrypoint: gunicorn -b :$PORT app:app
-
-handlers:
-  - url: /.*
-    script: auto
+Flask==2.2.3
+Flask-MySQLdb==0.2.0
+mysqlclient==2.0.3
+Werkzeug==2.2.2
+gunicorn==20.1.0

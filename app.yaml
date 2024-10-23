@@ -1,6 +1,15 @@
 runtime: python39
 
-entrypoint: gunicorn -b :$PORT app:app
+entrypoint: gunicorn -b :$PORT app:app  # Adjust app:app if the filename or app name is different
+
+env_variables:
+  MYSQL_USER: roman
+  MYSQL_PASSWORD: 1994
+  MYSQL_DB: users_db
+  MYSQL_HOST: /cloudsql/double-balm-433618-r6:us-central1:roman
+
+beta_settings:
+  cloud_sql_instances: double-balm-433618-r6:us-central1:roman
 
 handlers:
   - url: /static
