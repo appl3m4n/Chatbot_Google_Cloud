@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import json
+import os
 from difflib import get_close_matches
 
 app = Flask(__name__)
@@ -17,6 +18,12 @@ app.config['MYSQL_DB'] = "users_db"
 #app.config['MYSQL_PASSWORD'] = "1994"
 #app.config['MYSQL_DB'] = "users_db"
 
+# Configuring the MySQL connection using environment variables
+#app.config['MYSQL_HOST'] = os.environ.get('DB_HOST')
+#app.config['MYSQL_USER'] = os.environ.get('DB_USER')
+#app.config['MYSQL_PASSWORD'] = os.environ.get('DB_PASS')
+#app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
+#app.config['MYSQL_UNIX_SOCKET'] = os.environ.get('DB_HOST')  # For Cloud SQL
 
 mysql = MySQL(app)
 
