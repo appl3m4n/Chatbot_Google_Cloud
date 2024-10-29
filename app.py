@@ -2,30 +2,29 @@ from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import json
 import os
+import pymysql
 from difflib import get_close_matches
 
 app = Flask(__name__)
 
-# Initialize Flask MySQL
-app.config['MYSQL_HOST'] = "localhost"
-app.config['MYSQL_USER'] = "root"
-app.config['MYSQL_PASSWORD'] = ""
-app.config['MYSQL_DB'] = "users_db"
+#google cloud
+#db_user = os.environ.get('CLOUD_SQL_USERNAME')
+#db_password = os.environ.get('CLOUD_SQL_PASSWORD')
+#db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+#db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
 
-#Google Cloud
-#app.config['MYSQL_HOST'] = "/cloudsql/double-balm-433618-r6:us-central1:roman"
-#app.config['MYSQL_USER'] = "roman"
-#app.config['MYSQL_PASSWORD'] = "1994"
-#app.config['MYSQL_DB'] = "users_db"
+#localhost
+db_user = "root"
+db_password = ""
+db_name = "users_db"
+db_connection_name = "localhost"
 
-# Configuring the MySQL connection using environment variables
-#app.config['MYSQL_HOST'] = os.environ.get('DB_HOST')
-#app.config['MYSQL_USER'] = os.environ.get('DB_USER')
-#app.config['MYSQL_PASSWORD'] = os.environ.get('DB_PASS')
-#app.config['MYSQL_DB'] = os.environ.get('DB_NAME')
-#app.config['MYSQL_UNIX_SOCKET'] = os.environ.get('DB_HOST')  # For Cloud SQL
+print("Database User:", db_user)
+print("Database Password:", '*' * len(db_password) if db_password else "No password provided")
+print("Host:", db_name)
+print("Database Name:", db_connection_name)
 
-mysql = MySQL(app)
+#mysql = MySQL(app)
 
 # Load knowledge base from JSON file
 def load_knowledge_base(file_path: str):
@@ -83,23 +82,40 @@ def submit():
     else:
         chatgpt_output = 'Model not selected.'
 
-    # Assuming user details are collected from the form as well
-    userDetails = {'name': request.form.get('name', 'Guest')}  # Example user detail
+    if os.environ.get('GAE_ENV') == 'standard':
+        # If deployed, use the local socket interface for accessing Cloud SQL
+        unix_socket = '/cloudsql/{}'.format(db_connection_name)
+        cnx = pymysql.connect(user=db_user, password=db_password,
+                              unix_socket=unix_socket, db=db_name)
+    else:
+        # If running locally, use the TCP connections instead
+        # Set up Cloud SQL Proxy (cloud.google.com/sql/docs/mysql/sql-proxy)
+        # so that your application can use 127.0.0.1:3306 to connect to your
+        # Cloud SQL instance
+        host = '127.0.0.1'
+        cnx = pymysql.connect(user=db_user, password=db_password,
+                              host=host, db=db_name)
 
-    # Store user input and model output in the database
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO users_gpt (input, output) VALUES (%s, %s)", (chatgpt_input, chatgpt_output))
-    mysql.connection.commit()
-    cur.close()
+    userDetails = []
 
-    # Fetch all data from the database
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM users_gpt ORDER BY id DESC LIMIT 5")
-    userDetails = cur.fetchall()
-    cur.close()
+    try:
+        with cnx.cursor() as cursor:
+            # Insert user input and model output into the database
+            cursor.execute("INSERT INTO users_gpt (input, output) VALUES (%s, %s)", 
+                           (chatgpt_input, chatgpt_output))
+            cnx.commit()  # Commit the transaction
 
+            # Fetch all data from the database
+            cursor.execute("SELECT * FROM users_gpt ORDER BY id DESC LIMIT 5")
+            userDetails = cursor.fetchall()  # Fetch results
+
+    except pymysql.MySQLError as e:
+        print(f"Database error: {e}")
+    finally:
+        cnx.close()  # Ensure the connection is closed
+        
     # Render the template with user input, model output, and user details
     return render_template('index_submit.html', chatgpt_input=chatgpt_input, chatgpt_output=chatgpt_output, userDetails=userDetails)
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Set debug=True for easier development
+    app.run(host='127.0.0.1', port=8080, debug=True)
