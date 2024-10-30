@@ -3,9 +3,15 @@ from flask_mysqldb import MySQL
 import json
 import os
 import pymysql
+import openai
 from difflib import get_close_matches
 
 app = Flask(__name__)
+
+# OpenAI API key
+str1 = 'sk-proj-Vbn3Wjz2xzY7khGJWJxasOD8xjJH39q63rqlE6KHISQMdYWVkS_'
+str2 = '36EWwvVbrp8LGwn_poZyz7ZT3BlbkFJB_VX9c2D_kT2TQJvRYdm1F2RmItabpz4NxTuovFG9qK-'
+str3 = 'x6c6zT_783BTo0Mf_rf6QiOizb7TEA'
 
 #google cloud
 #db_user = os.environ.get('CLOUD_SQL_USERNAME')
@@ -69,18 +75,28 @@ def submit():
     # Check which model is selected by the user
     selected_option = request.form['dropdownBox']
 
-    if selected_option == 'option2':  # JSON based chatbot
+    if selected_option == 'option1':  # ChatGPT model
+        # Initialize OpenAI
+        openai.api_key = str1 + str2 + str3
+        
+        # Send user input to OpenAI for completion
+        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=[{"role": "user", "content": chatgpt_input}])
+        chatgpt_output = completion.choices[0].message.content
+    elif selected_option == 'option2':  # JSON based chatbot
         knowledge_base = load_knowledge_base("knowledge_base.json")
         best_match = find_best_match(chatgpt_input, [q["question"] for q in knowledge_base["questions"]])
 
         if best_match:
             answer = get_answer_for_question(best_match, knowledge_base)
             link = get_link_for_question(best_match, knowledge_base)
-            chatgpt_output = f'{answer} Link: {link}' if link else answer
+            if link:
+                chatgpt_output = f'{answer} Link: {link}'
+            else:
+                chatgpt_output = f'{answer}' # If link is missing or not defined
         else:
             chatgpt_output = 'I don\'t know the answer.'
     else:
-        chatgpt_output = 'Model not selected.'
+        chatgpt_output = 'Model not selected'
 
     if os.environ.get('GAE_ENV') == 'standard':
         # If deployed, use the local socket interface for accessing Cloud SQL
