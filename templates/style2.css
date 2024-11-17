@@ -184,26 +184,3 @@ th {
         font-size: 14px; /* Smaller font size for tables on mobile devices */
     }
 }
-
-#signup {
-    width: 85%;  /* Adjust this width as necessary */
-    max-width: 800px;
-    margin: 20px auto;  /* This centers the div */
-    background-color: #fff;
-   
-    padding-bottom: 10px;  /* More padding at the bottom */
-    padding-left: 20px;  /* Moderate left padding */
-    padding-right: 20px;  /* Moderate right padding */
-    text-align: center;  /* Centers the content inside the div */
-}
-
-#signup a {
-    font-size: 16px;
-    color: #3498db;
-    text-decoration: none;
-}
-
-#signup a:hover {
-    color: #2c3e50;
-}
-

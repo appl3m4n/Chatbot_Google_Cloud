@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    
     <div id="title">
         <div class="image-container">
             <a href="/" class="image-link">
@@ -19,6 +20,18 @@
             </a>
         </div>
     </div>
+
+    <!-- Welcome message and Login/Logout button -->
+    <div id="welcome">
+        {% if current_user.is_authenticated %}
+            <h1>Welcome back, {{ current_user.username }}!</h1>
+            <a href="{{ url_for('logout') }}" class="btn logout-btn">Logout</a>
+        {% else %}
+            <h1>Welcome, Guest!</h1>
+            <a href="{{ url_for('login') }}" class="btn login-btn">Login</a>
+        {% endif %}
+    </div>
+
 <div id="form"><form name="passdata" action="/submit" method="post">
 <!--    <label>Name:</label>
 <input type="text" name="name">

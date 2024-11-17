@@ -23,10 +23,10 @@
     {% if current_user.is_authenticated %}
     <h1>Welcome back, {{ current_user.username }}!</h1>
     <a href="{{ url_for('logout') }}">Logout</a>
-{% else %}
+    {% else %}
     <h1>Welcome, Guest!</h1>
     <a href="{{ url_for('login') }}">Login</a>
-{% endif %}
+    {% endif %}
 </body>
 
 </html>

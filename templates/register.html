@@ -5,20 +5,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">  <!-- Link to the same CSS file -->
     <title>Register</title>
 </head>
 
 <body>
-    <h1>Register Page</h1>
+    <div id="title">
+        <div class="image-container">
+            <a href="/" class="image-link">
+                <img src="static/logo.png" alt="Logo" class="logo1">
+            </a>
+        </div>
+        <div class="image-container right-align">
+            <a href="/login" class="image-link">
+                <img src="static/icon-profile.png" alt="Profile Icon" class="logo2">
+            </a>
+        </div>
+    </div>
 
-    <form method="POST" action="">
-        {{ form.hidden_tag() }}
-        {{ form.username }}
-        {{ form.password }}
-        {{ form.submit }}
-    </form>
+    <div id="form">
+        <h2>Create an Account</h2>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            
+            <label for="username">Username:</label>
+            {{ form.username }}
+            
+            <label for="password">Password:</label>
+            {{ form.password }}
+            
+            <input type="submit" value="Register">
+        </form>
 
-    <a href="{{ url_for('login') }}">Already have an account? Log In</a>
+        <div id="signup">
+            <p>Already have an account? <a href="{{ url_for('login') }}" class="btn">Log In</a></p>
+        </div>
+       
+    </div>
 </body>
 
 </html>
