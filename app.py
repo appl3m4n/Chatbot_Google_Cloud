@@ -111,7 +111,7 @@ def login():
 @login_required
 def dashboard():
     print(f"Current User ID: {current_user.id}")  # Log the current user's ID
-    return render_template('dashboard.html', username=current_user.username)
+    return render_template('index_open.html', username=current_user.username)
 
 
 
@@ -119,7 +119,7 @@ def dashboard():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
 @app.route('/register', methods=['GET', 'POST'])

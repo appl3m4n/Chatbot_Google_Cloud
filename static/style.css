@@ -207,3 +207,51 @@ th {
     color: #2c3e50;
 }
 
+/* Flex container for the welcome message and buttons */
+#welcome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#welcome h1 {
+    font-size: 24px;
+    color: #333;
+    margin-right: 20px; /* Adds space between the text and button */
+}
+
+#welcome .btn {
+    font-size: 16px;
+    padding: 12px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the buttons */
+#welcome .btn:hover {
+    background-color: #2c3e50;
+}
+
+/* Button specific styling for logout and login */
+.logout-btn {
+    background-color: #e74c3c;
+}
+
+.logout-btn:hover {
+    background-color: #c0392b;
+}
+
+.login-btn {
+    background-color: #3498db;
+}
+
+.login-btn:hover {
+    background-color: #2980b9;
+}
