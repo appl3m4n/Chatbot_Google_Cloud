@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, redirect, request, flash
+from flask import Flask, render_template, request
 from flask_mysqldb import MySQL
 import json
 import os
@@ -22,16 +22,16 @@ str2 = '36EWwvVbrp8LGwn_poZyz7ZT3BlbkFJB_VX9c2D_kT2TQJvRYdm1F2RmItabpz4NxTuovFG9
 str3 = 'x6c6zT_783BTo0Mf_rf6QiOizb7TEA'
 
 #google cloud
-#db_user = os.environ.get('CLOUD_SQL_USERNAME')
-#db_password = os.environ.get('CLOUD_SQL_PASSWORD')
-#db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
-#db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
+db_user = os.environ.get('CLOUD_SQL_USERNAME')
+db_password = os.environ.get('CLOUD_SQL_PASSWORD')
+db_name = os.environ.get('CLOUD_SQL_DATABASE_NAME')
+db_connection_name = os.environ.get('CLOUD_SQL_CONNECTION_NAME')
 
 #localhost
-db_user = "root"
-db_password = ""
-db_name = "users_db"
-db_connection_name = "localhost"
+#db_user = "root"
+#db_password = ""
+#db_name = "users_db"
+#db_connection_name = "localhost"
 
 print("Database User:", db_user)
 print("Database Password:", '*' * len(db_password) if db_password else "No password provided")
@@ -41,10 +41,6 @@ print("Database Name:", db_connection_name)
 #mysql = MySQL(app)
 
 app.config['SECRET_KEY'] = 'thisisasecretkey'
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = ''  # Add your password if required
-app.config['MYSQL_DB'] = 'users_db'
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
